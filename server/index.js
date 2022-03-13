@@ -21,6 +21,11 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log(`User ${socket.id} connected.`);
 
+  socket.on("joinChat", (data) => {
+    socket.join(data);
+    console.log(`User: ${socket.id}, joined the chat.`);
+  });
+
   socket.on("disconnect", () => {
     console.log(`User ${socket.id} disconnected.`);
   });
