@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-const ChatOuter = styled.div`
-  border: 1px solid green;
+const ChatOuter = styled.div``;
+const ChatBodyMessage = styled.div`
+  display: flex;
+  &#me {
+    border: 1px solid blue;
+  }
+  &#other {
+    border: 1px solid green;
+  }
 `;
 const ChatHeader = styled.div``;
 const ChatBody = styled.div``;
@@ -26,6 +33,7 @@ const ChatWindow = ({ socket, username }) => {
       };
 
       await socket.emit("sendMessage", messageData);
+      setMessageList((list) => [...list, messageData]);
     }
   };
   // Listen to any changes on the socket server
@@ -40,7 +48,14 @@ const ChatWindow = ({ socket, username }) => {
       <ChatHeader>Header</ChatHeader>
       <ChatBody>
         {messageList.map((item, idx) => (
-          <p key={idx}>{item.message}</p>
+          <ChatBodyMessage
+            key={idx}
+            id={username === item.author ? "me" : "other"}
+          >
+            <p>{item.message}</p>
+            <p>{item.author}</p>
+            <p>{item.time}</p>
+          </ChatBodyMessage>
         ))}
       </ChatBody>
       <ChatFooter>
@@ -49,6 +64,9 @@ const ChatWindow = ({ socket, username }) => {
           placeholder="Type a message..."
           onChange={(event) => {
             setCurrentMessage(event.target.value);
+          }}
+          onKeyPress={(event) => {
+            event.key === "Enter" && sendMessage();
           }}
         />
         <button onClick={sendMessage}>Send</button>
