@@ -22,7 +22,7 @@ io.on("connection", (socket) => {
   console.log(`User ${socket.id} connected.`);
 
   socket.on("disconnect", () => {
-    console.log("User disconnected.", socket.id);
+    console.log(`User ${socket.id} disconnected.`);
   });
 });
 
