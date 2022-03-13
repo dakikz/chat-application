@@ -10,6 +10,7 @@ const AppOuter = styled.div`
 `;
 
 function App() {
+  // Pass the username to the state
   const [username, setUsername] = useState("");
 
   const joinChat = () => {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const ChatOuter = styled.div`
@@ -9,11 +9,22 @@ const ChatBody = styled.div``;
 const ChatFooter = styled.div``;
 
 const ChatWindow = ({ socket, username }) => {
+  const [currentMessage, setCurrentMessage] = useState(""); // Keep track of current message
+
   return (
     <ChatOuter>
       <ChatHeader>Header</ChatHeader>
       <ChatBody>Body</ChatBody>
-      <ChatFooter>Footer</ChatFooter>
+      <ChatFooter>
+        <input
+          type="text"
+          placeholder="Type a message..."
+          onChange={(event) => {
+            setCurrentMessage(event.target.value);
+          }}
+        />
+        <button>Send</button>
+      </ChatFooter>
     </ChatOuter>
   );
 };
