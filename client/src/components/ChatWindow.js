@@ -11,6 +11,22 @@ const ChatFooter = styled.div``;
 const ChatWindow = ({ socket, username }) => {
   const [currentMessage, setCurrentMessage] = useState(""); // Keep track of current message
 
+  const sendMessage = async () => {
+    if (currentMessage !== "") {
+      console.log(currentMessage);
+      const messageData = {
+        author: username,
+        message: currentMessage,
+        time:
+          new Date(Date.now()).getHours() +
+          ":" +
+          new Date(Date.now()).getMinutes(),
+      };
+
+      await socket.emit("sendMessage", messageData);
+    }
+  };
+
   return (
     <ChatOuter>
       <ChatHeader>Header</ChatHeader>
@@ -23,7 +39,7 @@ const ChatWindow = ({ socket, username }) => {
             setCurrentMessage(event.target.value);
           }}
         />
-        <button>Send</button>
+        <button onClick={sendMessage}>Send</button>
       </ChatFooter>
     </ChatOuter>
   );

@@ -26,6 +26,11 @@ io.on("connection", (socket) => {
     console.log(`User: ${socket.id}, joined the chat.`);
   });
 
+  // Handle sending the data
+  socket.on("sendMessage", (data) => {
+    console.log(data);
+  });
+
   socket.on("disconnect", () => {
     console.log(`User ${socket.id} disconnected.`);
   });
