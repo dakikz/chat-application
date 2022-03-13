@@ -2,11 +2,29 @@ const express = require("express");
 const app = express();
 const http = require("http");
 const cors = require("cors");
+const { Server } = require("socket.io");
 
 app.use(cors());
 
-//Generating server
+// Generating server
 const server = http.createServer(app);
+
+// Telling socket.io to accept socket communication with this URL
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
+// socket.io pre-built events
+io.on("connection", (socket) => {
+  console.log(`User ${socket.id} connected.`);
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected.", socket.id);
+  });
+});
 
 server.listen(3010, () => {
   console.log("Server OK!");
