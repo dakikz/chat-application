@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const ChatOuter = styled.div`
@@ -15,6 +15,7 @@ const ChatWindow = ({ socket, username }) => {
     if (currentMessage !== "") {
       console.log(currentMessage);
       const messageData = {
+        room: "chatRoom",
         author: username,
         message: currentMessage,
         time:
@@ -26,6 +27,12 @@ const ChatWindow = ({ socket, username }) => {
       await socket.emit("sendMessage", messageData);
     }
   };
+  // Listen to any changes on the socket server
+  useEffect(() => {
+    socket.on("receivedMessage", (data) => {
+      console.log(data);
+    });
+  }, [socket]);
 
   return (
     <ChatOuter>

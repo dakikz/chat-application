@@ -23,12 +23,12 @@ io.on("connection", (socket) => {
 
   socket.on("joinChat", (data) => {
     socket.join(data);
-    console.log(`User: ${socket.id}, joined the chat.`);
+    console.log(`User: ${socket.id}, joined the chat ${data}.`);
   });
 
-  // Handle sending the data
+  // Handle sending the data - Emmiting receivedMessage to sendMessage
   socket.on("sendMessage", (data) => {
-    console.log(data);
+    socket.to(data.room).emit("receivedMessage", data);
   });
 
   socket.on("disconnect", () => {
