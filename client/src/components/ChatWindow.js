@@ -10,6 +10,7 @@ const ChatFooter = styled.div``;
 
 const ChatWindow = ({ socket, username }) => {
   const [currentMessage, setCurrentMessage] = useState(""); // Keep track of current message
+  const [messageList, setMessageList] = useState([]);
 
   const sendMessage = async () => {
     if (currentMessage !== "") {
@@ -30,14 +31,18 @@ const ChatWindow = ({ socket, username }) => {
   // Listen to any changes on the socket server
   useEffect(() => {
     socket.on("receivedMessage", (data) => {
-      console.log(data);
+      setMessageList((list) => [...list, data]);
     });
   }, [socket]);
 
   return (
     <ChatOuter>
       <ChatHeader>Header</ChatHeader>
-      <ChatBody>Body</ChatBody>
+      <ChatBody>
+        {messageList.map((item, idx) => (
+          <p key={idx}>{item.message}</p>
+        ))}
+      </ChatBody>
       <ChatFooter>
         <input
           type="text"
