@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import ScrollToBottom from "react-scroll-to-bottom";
 import styled from "styled-components";
 
 const ChatOuter = styled.div``;
 const ChatBodyMessage = styled.div`
   display: flex;
+
   &#me {
     border: 1px solid blue;
   }
@@ -12,7 +14,13 @@ const ChatBodyMessage = styled.div`
   }
 `;
 const ChatHeader = styled.div``;
-const ChatBody = styled.div``;
+const ChatBody = styled.div`
+  border: 4px solid yellow;
+  height: 100px;
+  & .chatContainer {
+    height: 100%;
+  }
+`;
 const ChatFooter = styled.div``;
 
 const ChatWindow = ({ socket, username }) => {
@@ -47,16 +55,18 @@ const ChatWindow = ({ socket, username }) => {
     <ChatOuter>
       <ChatHeader>Header</ChatHeader>
       <ChatBody>
-        {messageList.map((item, idx) => (
-          <ChatBodyMessage
-            key={idx}
-            id={username === item.author ? "me" : "other"}
-          >
-            <p>{item.message}</p>
-            <p>{item.author}</p>
-            <p>{item.time}</p>
-          </ChatBodyMessage>
-        ))}
+        <ScrollToBottom className="chatContainer">
+          {messageList.map((item, idx) => (
+            <ChatBodyMessage
+              key={idx}
+              id={username === item.author ? "me" : "other"}
+            >
+              <p>{item.message}</p>
+              <p>{item.author}</p>
+              <p>{item.time}</p>
+            </ChatBodyMessage>
+          ))}
+        </ScrollToBottom>
       </ChatBody>
       <ChatFooter>
         <input
