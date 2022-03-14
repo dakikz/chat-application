@@ -42,6 +42,7 @@ const ChatWindow = ({ socket, username }) => {
 
       await socket.emit("sendMessage", messageData);
       setMessageList((list) => [...list, messageData]);
+      setCurrentMessage("");
     }
   };
   // Listen to any changes on the socket server
@@ -72,6 +73,7 @@ const ChatWindow = ({ socket, username }) => {
         <input
           type="text"
           placeholder="Type a message..."
+          value={currentMessage}
           onChange={(event) => {
             setCurrentMessage(event.target.value);
           }}
