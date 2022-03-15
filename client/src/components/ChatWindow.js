@@ -68,6 +68,7 @@ const ChatBodyMessage = styled.div`
     display: flex;
     align-items: flex-end;
     & .messageSet {
+      position: relative;
       display: flex;
       align-items: flex-end;
     }
@@ -82,16 +83,26 @@ const ChatBodyMessage = styled.div`
         border-bottom-left-radius: 16px 14px;
       }
       &:after {
-        right: -26px;
-        width: 26px;
+        right: -8px;
+        width: 8px;
         background: #dbe1ed;
         border-bottom-left-radius: 10px;
+      }
+      & .showIt {
+        position: absolute;
+        bottom: 0;
       }
     }
   }
   & .messageDetails {
-    display: flex;
+    display: none;
     gap: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #24b0ea;
+    &.showIt {
+      display: flex;
+    }
   }
 `;
 const ChatHeader = styled.div`
@@ -108,6 +119,25 @@ const ChatBody = styled.div`
   overflow-x: hidden;
   & .chatContainer {
     height: 100%;
+    & button {
+      background-color: #24b0ea;
+    }
+    & button::after {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-style: solid;
+      border-width: 2px 2px 0 0;
+      content: "";
+      display: inline-block;
+      height: 6px;
+      position: relative;
+      top: 3px;
+      transform: rotate(135deg);
+      vertical-align: top;
+      width: 6px;
+      color: #ffffff;
+    }
   }
 `;
 const ChatFooter = styled.div`
@@ -143,6 +173,7 @@ const ChatFooter = styled.div`
 const ChatWindow = ({ socket, username, other }) => {
   const [currentMessage, setCurrentMessage] = useState(""); // Keep track of current message
   const [messageList, setMessageList] = useState([]);
+  const [clicked, setClicked] = useState(false);
 
   const sendMessage = async () => {
     if (currentMessage !== "") {
@@ -154,6 +185,7 @@ const ChatWindow = ({ socket, username, other }) => {
         time:
           new Date(Date.now()).getHours() +
           ":" +
+          (new Date(Date.now()).getMinutes() < 10 ? "0" : "") +
           new Date(Date.now()).getMinutes(),
       };
 
@@ -180,8 +212,15 @@ const ChatWindow = ({ socket, username, other }) => {
               id={username === item.author ? "me" : "other"}
             >
               <div className="messageSet">
-                <p className="messageBubble">{item.message}</p>
-                <div className="messageDetails">
+                <p
+                  className="messageBubble"
+                  onClick={() => setClicked(!clicked)}
+                >
+                  {item.message}
+                </p>
+                <div
+                  className={`messageDetails ${clicked ? `showIt` : `asdf`}`}
+                >
                   <p>{item.author}</p>
                   <p>{item.time}</p>
                 </div>

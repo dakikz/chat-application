@@ -65,3 +65,32 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  transition: all 0.3s ease;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  transition: all 0.3s ease;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #24b0ea;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #1c90c2;
+  transition: all 0.3s ease;
+}
+
+.react-scroll-to-bottom {
+  border: 1px solid red;
+}
