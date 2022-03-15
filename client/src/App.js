@@ -58,6 +58,9 @@ function App() {
               type="text"
               placeholder="Enter your username"
               onChange={(event) => setUsername(event.target.value)}
+              onKeyPress={(event) => {
+                event.key === "Enter" && joinChat();
+              }}
             />
             <button onClick={joinChat}>Join Chat</button>
           </ChatLogin>

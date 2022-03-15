@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import styled from "styled-components";
+import { colors } from "../config/styles";
 
 const ChatOuter = styled.div`
   box-shadow: 20px 20px 60px #babfc9, -20px -20px 60px #fcffff;
@@ -13,15 +14,86 @@ const ChatOuter = styled.div`
 const ChatBodyMessage = styled.div`
   display: flex;
   flex-direction: column;
-
-  &#me {
-    border: 1px solid blue;
+  & .messageBubble {
+    word-break: break-all;
+    border-radius: 20px;
+    padding: 10px 14px;
+    max-width: 300px;
+    width: 100%;
+    &:before,
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      height: 15px;
+    }
+  }
+  & .messageSet {
     display: flex;
-    flex-wrap: wrap;
     flex-direction: column;
+    max-width: 100%;
+    margin-bottom: 10px;
+  }
+  &#me {
+    display: flex;
+    align-items: flex-start;
+    margin-left: 10px;
+    & .messageBubble {
+      position: relative;
+      border: 1px solid black;
+      z-index: 2;
+      background: ${colors.meMessageBubbleBg};
+      background: ${colors.meMessageBubble};
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#e7e5e8",endColorstr="#e7e5e8",GradientType=1);
+      &:before {
+        left: -7px;
+        width: 20px;
+        background: #e7e5e8;
+        border-bottom-right-radius: 16px 14px;
+        border-bottom: 1px solid black;
+        z-index: 1;
+      }
+      &:after {
+        left: -26px;
+        width: 26px;
+        background: #dbe1ed;
+        border-bottom: 1px solid black;
+        border-bottom-right-radius: 10px;
+        z-index: 1;
+      }
+    }
   }
   &#other {
-    border: 1px solid green;
+    margin-right: 10px;
+    text-align: left;
+    display: flex;
+    align-items: flex-end;
+    & .messageSet {
+      display: flex;
+      align-items: flex-end;
+    }
+    & .messageBubble {
+      position: relative;
+      background: ${colors.otherMessageBubbleBg};
+      background: ${colors.otherMessageBubble};
+      &:before {
+        right: -7px;
+        width: 20px;
+        background: #92d644;
+        border-bottom-left-radius: 16px 14px;
+      }
+      &:after {
+        right: -26px;
+        width: 26px;
+        background: #dbe1ed;
+        border-bottom-left-radius: 10px;
+      }
+    }
+  }
+
+  & .messageDetails {
+    display: flex;
+    gap: 10px;
   }
 `;
 const ChatHeader = styled.div``;
@@ -75,9 +147,13 @@ const ChatWindow = ({ socket, username }) => {
               key={idx}
               id={username === item.author ? "me" : "other"}
             >
-              <p>{item.message}</p>
-              <p>{item.author}</p>
-              <p>{item.time}</p>
+              <div className="messageSet">
+                <p className="messageBubble">{item.message}</p>
+                <div className="messageDetails">
+                  <p>{item.author}</p>
+                  <p>{item.time}</p>
+                </div>
+              </div>
             </ChatBodyMessage>
           ))}
         </ScrollToBottom>
