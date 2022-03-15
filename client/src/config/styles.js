@@ -1,4 +1,7 @@
 export const colors = {
+  accentBlue: "#24B0EA",
+  white: "#ffffff",
+  lightGrey: "#dbe1ed",
   meMessageBubbleBg: "rgb(231, 229, 232)",
   meMessageBubble: "#cccccc",
   otherMessageBubbleBg: "rgb(146, 214, 68)",

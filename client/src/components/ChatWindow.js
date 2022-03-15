@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import styled from "styled-components";
-import { BiSend } from "react-icons/bi";
+import { BiSend, BiSmile } from "react-icons/bi";
 import { colors } from "../config/styles";
 
 const ChatOuter = styled.div`
@@ -9,12 +9,35 @@ const ChatOuter = styled.div`
   border-radius: 10px;
   width: 100%;
   max-height: 400px;
-  background-color: #24b0ea;
+  background-color: ${colors.accentBlue};
+  position: relative;
+`;
+const Countdown = styled.div`
+  display: flex;
+  font-size: 40px;
+  font-weight: 700;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  flex-direction: column;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  z-index: 99;
+  flex-wrap: wrap;
+  & span {
+    font-size: 200px;
+    color: ${colors.accentBlue};
+  }
 `;
 const ChatBodyMessage = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px 20px;
+
   & .messageBubble {
     word-break: break-all;
     border-radius: 20px;
@@ -56,7 +79,7 @@ const ChatBodyMessage = styled.div`
         content: "";
         left: -8px;
         width: 8px;
-        background: #dbe1ed;
+        background: ${colors.lightGrey};
         border-bottom-right-radius: 10px;
         z-index: -1;
         position: absolute;
@@ -85,7 +108,7 @@ const ChatBodyMessage = styled.div`
       &:after {
         right: -8px;
         width: 8px;
-        background: #dbe1ed;
+        background: ${colors.lightGrey};
         border-bottom-left-radius: 10px;
       }
       & .showIt {
@@ -99,20 +122,20 @@ const ChatBodyMessage = styled.div`
     gap: 10px;
     font-size: 14px;
     font-weight: 700;
-    color: #24b0ea;
+    color: ${colors.accentBlue};
     &.showIt {
       display: flex;
     }
   }
 `;
 const ChatHeader = styled.div`
-  color: #ffffff;
+  color: ${colors.white};
   font-size: 20px;
   font-weight: 700;
   padding: 10px;
 `;
 const ChatBody = styled.div`
-  background-color: #dbe1ed;
+  background-color: ${colors.lightGrey};
   border-radius: 30px 30px 0 0;
   width: 100%;
   height: 300px;
@@ -120,7 +143,7 @@ const ChatBody = styled.div`
   & .chatContainer {
     height: 100%;
     & button {
-      background-color: #24b0ea;
+      background-color: ${colors.accentBlue};
     }
     & button::after {
       display: flex;
@@ -174,20 +197,48 @@ const ChatWindow = ({ socket, username, other }) => {
   const [currentMessage, setCurrentMessage] = useState(""); // Keep track of current message
   const [messageList, setMessageList] = useState([]);
   const [clicked, setClicked] = useState(false);
+  const [countdown, setCountdown] = useState(false);
+  const [countdownTime, setCountdownTime] = useState([]);
 
   const sendMessage = async () => {
     if (currentMessage !== "") {
-      console.log(currentMessage);
       const messageData = {
         room: "chatRoom",
         author: username,
-        message: currentMessage,
+        message: currentMessage.includes("(smile)")
+          ? currentMessage.replace("(smile)", ":)")
+          : currentMessage.includes("(wink)")
+          ? currentMessage.replace("(wink)", ";)")
+          : currentMessage,
         time:
           new Date(Date.now()).getHours() +
           ":" +
           (new Date(Date.now()).getMinutes() < 10 ? "0" : "") +
           new Date(Date.now()).getMinutes(),
       };
+
+      if (currentMessage.substring(0, 5) === "/nick") {
+        username = "Hi";
+      }
+      if (currentMessage.includes("/countdown")) {
+        const separatorCommands = currentMessage.split(" ");
+
+        let timeLimit = separatorCommands[1];
+        const urlTo = separatorCommands[2];
+
+        setCountdown(true);
+        const downloadTimer = setInterval(function () {
+          if (timeLimit <= 0) {
+            clearInterval(downloadTimer);
+            window.location.replace(
+              urlTo.includes("http") ? urlTo : "http://" + urlTo
+            );
+          } else {
+            setCountdownTime(timeLimit);
+          }
+          timeLimit -= 1;
+        }, 1000);
+      }
 
       await socket.emit("sendMessage", messageData);
       setMessageList((list) => [...list, messageData]);
@@ -203,6 +254,11 @@ const ChatWindow = ({ socket, username, other }) => {
 
   return (
     <ChatOuter>
+      {countdown && (
+        <Countdown className="countdown">
+          Redirecting you in <span>{countdownTime}</span>
+        </Countdown>
+      )}
       <ChatHeader>Chat with:</ChatHeader>
       <ChatBody>
         <ScrollToBottom className="chatContainer">
@@ -242,7 +298,7 @@ const ChatWindow = ({ socket, username, other }) => {
           }}
         />
         <button onClick={sendMessage}>
-          <BiSend size={25} color="#24b0ea" />
+          <BiSend size={25} color={`${colors.accentBlue}`} />
         </button>
       </ChatFooter>
     </ChatOuter>

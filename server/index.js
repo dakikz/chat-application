@@ -27,7 +27,6 @@ io.on("connection", (socket) => {
   });
   socket.on("joinUser", (data) => {
     socket.join(data);
-    console.log(`${data} ate`);
   });
 
   // Handle sending the data - Emmiting receivedMessage to sendMessage
