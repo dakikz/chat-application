@@ -220,6 +220,13 @@ const ChatWindow = ({ socket, username, other }) => {
       if (currentMessage.substring(0, 5) === "/nick") {
         username = "Hi";
       }
+      console.log(messageList);
+      if (currentMessage.substring(0, 5) === "/oops") {
+        messageList.pop();
+        messageList.pop();
+        // setMessageList(messageList.pop());
+        // setMessageList(messageList.pop());
+      }
       if (currentMessage.includes("/countdown")) {
         const separatorCommands = currentMessage.split(" ");
 
