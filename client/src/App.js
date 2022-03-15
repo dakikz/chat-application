@@ -9,12 +9,32 @@ const AppOuter = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid red;
+  background-color: #dbe1ed;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
+  border: 3px solid purple;
+  padding: 40px;
 `;
-const ChatSection = styled.div``;
-const ChatLogin = styled.div``;
+const ChatSection = styled.div`
+  display: flex;
+  flex-direction: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+  padding: 10px;
+  border: 1px solid blue;
+`;
+const ChatLogin = styled.div`
+  text-align: center;
+  background-color: #dbe1ed;
+  padding: 30px;
+  border-radius: 50px;
+  box-shadow: 20px 20px 60px #babfc9, -20px -20px 60px #fcffff;
+  & h1 {
+    margin-bottom: 20px;
+    font-size: 30px;
+  }
+`;
 
 function App() {
   // Pass the username to the state

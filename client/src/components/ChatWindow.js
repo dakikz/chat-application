@@ -2,12 +2,23 @@ import React, { useEffect, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import styled from "styled-components";
 
-const ChatOuter = styled.div``;
+const ChatOuter = styled.div`
+  box-shadow: 20px 20px 60px #babfc9, -20px -20px 60px #fcffff;
+  border-radius: 10px;
+  padding: 10px;
+  width: 100%;
+  max-height: 400px;
+  border: 1px solid orange;
+`;
 const ChatBodyMessage = styled.div`
   display: flex;
+  flex-direction: column;
 
   &#me {
     border: 1px solid blue;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
   }
   &#other {
     border: 1px solid green;
@@ -16,7 +27,9 @@ const ChatBodyMessage = styled.div`
 const ChatHeader = styled.div``;
 const ChatBody = styled.div`
   border: 4px solid yellow;
-  height: 100px;
+  width: 100%;
+  height: 300px;
+  overflow-x: hidden;
   & .chatContainer {
     height: 100%;
   }
@@ -54,7 +67,7 @@ const ChatWindow = ({ socket, username }) => {
 
   return (
     <ChatOuter>
-      <ChatHeader>Header</ChatHeader>
+      <ChatHeader>Chat with:</ChatHeader>
       <ChatBody>
         <ScrollToBottom className="chatContainer">
           {messageList.map((item, idx) => (
