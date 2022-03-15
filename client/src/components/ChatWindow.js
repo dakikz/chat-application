@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import styled from "styled-components";
+import { BiSend } from "react-icons/bi";
 import { colors } from "../config/styles";
 
 const ChatOuter = styled.div`
   box-shadow: 20px 20px 60px #babfc9, -20px -20px 60px #fcffff;
   border-radius: 10px;
-  padding: 10px;
   width: 100%;
   max-height: 400px;
-  border: 1px solid orange;
+  background-color: #24b0ea;
 `;
 const ChatBodyMessage = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 10px 20px;
   & .messageBubble {
     word-break: break-all;
     border-radius: 20px;
@@ -37,34 +38,32 @@ const ChatBodyMessage = styled.div`
   &#me {
     display: flex;
     align-items: flex-start;
-    margin-left: 10px;
     & .messageBubble {
       position: relative;
-      border: 1px solid black;
       z-index: 2;
-      background: ${colors.meMessageBubbleBg};
       background: ${colors.meMessageBubble};
       filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#e7e5e8",endColorstr="#e7e5e8",GradientType=1);
-      &:before {
+      &::before {
+        content: "";
         left: -7px;
         width: 20px;
-        background: #e7e5e8;
+        background: ${colors.meMessageBubble};
         border-bottom-right-radius: 16px 14px;
-        border-bottom: 1px solid black;
-        z-index: 1;
+        z-index: -1;
+        position: absolute;
       }
-      &:after {
-        left: -26px;
-        width: 26px;
+      &::after {
+        content: "";
+        left: -8px;
+        width: 8px;
         background: #dbe1ed;
-        border-bottom: 1px solid black;
         border-bottom-right-radius: 10px;
-        z-index: 1;
+        z-index: -1;
+        position: absolute;
       }
     }
   }
   &#other {
-    margin-right: 10px;
     text-align: left;
     display: flex;
     align-items: flex-end;
@@ -90,15 +89,20 @@ const ChatBodyMessage = styled.div`
       }
     }
   }
-
   & .messageDetails {
     display: flex;
     gap: 10px;
   }
 `;
-const ChatHeader = styled.div``;
+const ChatHeader = styled.div`
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 10px;
+`;
 const ChatBody = styled.div`
-  border: 4px solid yellow;
+  background-color: #dbe1ed;
+  border-radius: 30px 30px 0 0;
   width: 100%;
   height: 300px;
   overflow-x: hidden;
@@ -106,9 +110,37 @@ const ChatBody = styled.div`
     height: 100%;
   }
 `;
-const ChatFooter = styled.div``;
+const ChatFooter = styled.div`
+  display: flex;
+  height: 50px;
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+  & input {
+    width: 80%;
+    border: none;
+    padding: 10px;
+    height: 100%;
+    outline: none;
+  }
+  & button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 20%;
+    height: 100%;
+    border: none;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+  & button:hover {
+    -webkit-box-shadow: inset -4px 0px 56px -34px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: inset -4px 0px 56px -34px rgba(0, 0, 0, 0.75);
+    box-shadow: inset -4px 0px 56px -34px rgba(0, 0, 0, 0.75);
+  }
+`;
 
-const ChatWindow = ({ socket, username }) => {
+const ChatWindow = ({ socket, username, other }) => {
   const [currentMessage, setCurrentMessage] = useState(""); // Keep track of current message
   const [messageList, setMessageList] = useState([]);
 
@@ -170,7 +202,9 @@ const ChatWindow = ({ socket, username }) => {
             event.key === "Enter" && sendMessage();
           }}
         />
-        <button onClick={sendMessage}>Send</button>
+        <button onClick={sendMessage}>
+          <BiSend size={25} color="#24b0ea" />
+        </button>
       </ChatFooter>
     </ChatOuter>
   );

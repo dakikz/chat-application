@@ -25,6 +25,10 @@ io.on("connection", (socket) => {
     socket.join(data);
     console.log(`User: ${socket.id}, joined the chat ${data}.`);
   });
+  socket.on("joinUser", (data) => {
+    socket.join(data);
+    console.log(`${data} ate`);
+  });
 
   // Handle sending the data - Emmiting receivedMessage to sendMessage
   socket.on("sendMessage", (data) => {
