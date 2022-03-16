@@ -27,6 +27,7 @@ io.on("connection", (socket) => {
   });
   socket.on("joinUser", (data) => {
     socket.join(data);
+    // socket.to(data.room).emit("usersJoin", data);
   });
 
   // Handle sending the data - Emmiting receivedMessage to sendMessage

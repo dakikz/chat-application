@@ -36,7 +36,7 @@ const Countdown = styled.div`
 const ChatBodyMessage = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px 20px;
+  padding: 5px 20px;
 
   & .messageBubble {
     word-break: break-all;
@@ -56,7 +56,7 @@ const ChatBodyMessage = styled.div`
     display: flex;
     flex-direction: column;
     max-width: 100%;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
   }
   &#me {
     display: flex;
@@ -90,6 +90,7 @@ const ChatBodyMessage = styled.div`
     text-align: left;
     display: flex;
     align-items: flex-end;
+
     & .messageSet {
       position: relative;
       display: flex;
@@ -199,12 +200,13 @@ const ChatWindow = ({ socket, username, other }) => {
   const [clicked, setClicked] = useState(false);
   const [countdown, setCountdown] = useState(false);
   const [countdownTime, setCountdownTime] = useState([]);
+  const [user, setUser] = useState(username);
 
   const sendMessage = async () => {
     if (currentMessage !== "") {
       const messageData = {
         room: "chatRoom",
-        author: username,
+        author: user,
         message: currentMessage.includes("(smile)")
           ? currentMessage.replace("(smile)", ":)")
           : currentMessage.includes("(wink)")
@@ -216,48 +218,60 @@ const ChatWindow = ({ socket, username, other }) => {
           (new Date(Date.now()).getMinutes() < 10 ? "0" : "") +
           new Date(Date.now()).getMinutes(),
       };
+      console.log(messageList);
 
       if (currentMessage.substring(0, 5) === "/nick") {
-        username = "Hi";
       }
-      console.log(messageList);
-      if (currentMessage.substring(0, 5) === "/oops") {
-        messageList.pop();
-        messageList.pop();
-        // setMessageList(messageList.pop());
-        // setMessageList(messageList.pop());
-      }
-      if (currentMessage.includes("/countdown")) {
-        const separatorCommands = currentMessage.split(" ");
 
-        let timeLimit = separatorCommands[1];
+      if (currentMessage.substring(0, 6) === "/think") {
+      }
+
+      if (currentMessage.substring(0, 5) === "/oops") {
+        let messageListCurrent = messageList;
+        messageList.pop();
+        setMessageList(messageListCurrent);
+      } else {
+        setMessageList((list) => [...list, messageData]);
+      }
+      await socket.emit("sendMessage", messageData);
+      setCurrentMessage("");
+    }
+  };
+
+  // Listen to any changes on the socket server
+  useEffect(() => {
+    socket.on("usersJoin", (data) => {
+      console.log(data);
+      username = data.user;
+      setUser(data.user);
+    });
+    socket.on("receivedMessage", (data) => {
+      let existingList = [...messageList];
+
+      setMessageList((list) => [...list, data]);
+
+      if (data.message.includes("/countdown")) {
+        const separatorCommands = data.message.split(" ");
+
+        let timeLimit = parseInt(separatorCommands[1]);
+        console.log(timeLimit);
         const urlTo = separatorCommands[2];
 
         setCountdown(true);
         const downloadTimer = setInterval(function () {
           if (timeLimit <= 0) {
             clearInterval(downloadTimer);
-            window.location.replace(
-              urlTo.includes("http") ? urlTo : "http://" + urlTo
-            );
+            window.location.href = urlTo.includes("http")
+              ? urlTo
+              : "http://" + urlTo;
           } else {
             setCountdownTime(timeLimit);
           }
           timeLimit -= 1;
         }, 1000);
       }
-
-      await socket.emit("sendMessage", messageData);
-      setMessageList((list) => [...list, messageData]);
-      setCurrentMessage("");
-    }
-  };
-  // Listen to any changes on the socket server
-  useEffect(() => {
-    socket.on("receivedMessage", (data) => {
-      setMessageList((list) => [...list, data]);
     });
-  }, [socket]);
+  }, []);
 
   return (
     <ChatOuter>
@@ -266,7 +280,7 @@ const ChatWindow = ({ socket, username, other }) => {
           Redirecting you in <span>{countdownTime}</span>
         </Countdown>
       )}
-      <ChatHeader>Chat with:</ChatHeader>
+      <ChatHeader>Chat with: {user}</ChatHeader>
       <ChatBody>
         <ScrollToBottom className="chatContainer">
           {messageList.map((item, idx) => (
@@ -276,7 +290,7 @@ const ChatWindow = ({ socket, username, other }) => {
             >
               <div className="messageSet">
                 <p
-                  className="messageBubble"
+                  className="messageBubble "
                   onClick={() => setClicked(!clicked)}
                 >
                   {item.message}

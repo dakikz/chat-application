@@ -98,7 +98,8 @@ function App() {
 
   const joinChat = () => {
     if (username !== "") {
-      socket.emit("joinChat", "chatRoom");
+      socket.emit("joinChat", "chatRoom", { user: username });
+      socket.emit("joinUser", "chatRoom", { user: username });
       setShowChat(true);
     }
   };
