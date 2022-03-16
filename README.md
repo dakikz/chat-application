@@ -18,6 +18,8 @@ Open localhost:3000 in two different tabs/windows and log in to the app using 2 
 
 - Users send and receive messages in green and grey bubbles, accordingly
 - The application was build with React.JS and socket.io. I have chosen to use socket.io as I thought it will help me finish the project faster and more efficiently. Clearly, I had some implications and limitations that caused my project to become overcomplicated for no reason. If I had the chance to redo the project, I would create the websockets from scratch.
+- Fully responsive
+- Video background
 
 ## Commands:
 
@@ -28,3 +30,6 @@ Open localhost:3000 in two different tabs/windows and log in to the app using 2 
 - (smile) and (wink) converts into a smiley and winking face
 - /countdown 5 google.com , starts a visible countdown with redirection to the relevant URL
 - Clicking on the message bubble, it shows sender's name and time the message was sent
+- When a new message arrives, it slides in, and the messages above slide up
+- When scrolling up, a scroll down button appears on the bottom right of the chat window
+- Custom scrollbar

@@ -8,7 +8,3 @@ export const colors = {
   otherMessageBubble:
     "linear-gradient(180deg,rgba(146, 214, 68, 1) 0%,rgba(146, 214, 68, 1) 25%,rgba(137, 200, 65, 1) 40%,rgba(137, 200, 65, 1) 60%,rgba(146, 214, 68, 1) 80%,rgba(146, 214, 68, 1) 100%);",
 };
-
-export const heights = {
-  navbarHeight: "70px",
-};

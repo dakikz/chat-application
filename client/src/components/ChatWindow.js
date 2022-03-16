@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import styled from "styled-components";
-import { BiSend, BiSmile } from "react-icons/bi";
+import { BiSend } from "react-icons/bi";
 import { colors } from "../config/styles";
 
 const ChatOuter = styled.div`

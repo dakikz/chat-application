@@ -69,6 +69,14 @@ const ChatLogin = styled.div`
     box-shadow: -4px 4px 8px #9d9d9d, 4px -4px 8px #ffffff;
     height: 100%;
     outline: none;
+    width: 70%;
+    @media (max-width: 500px) {
+      width: 100%;
+      border-radius: 20px 20px 0 0;
+      padding: 10px 20px;
+      text-align: center;
+      box-shadow: 0 4px 8px #9d9d9d, 0 -4px 8px #ffffff;
+    }
   }
   & button {
     border: 0;
@@ -80,6 +88,13 @@ const ChatLogin = styled.div`
     background-color: #cccccc;
     transition: all 0.3s ease;
     cursor: pointer;
+    width: 30%;
+    @media (max-width: 500px) {
+      width: 100%;
+      border-radius: 0 0 20px 20px;
+      padding: 10px 20px;
+      text-align: center;
+    }
   }
   & button:hover {
     background: #e0e0e0;
@@ -88,6 +103,12 @@ const ChatLogin = styled.div`
   & .joinChat {
     border: none;
     height: 40px;
+    width: 100%;
+    @media (max-width: 500px) {
+      display: flex;
+      flex-direction: column;
+      height: auto;
+    }
   }
 `;
 
