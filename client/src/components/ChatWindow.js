@@ -244,12 +244,9 @@ const ChatWindow = ({ socket, username }) => {
   // Listen to any changes on the socket server
   useEffect(() => {
     socket.on("usersJoin", (data) => {
-      username = data.user;
       setUser(data.user);
     });
     socket.on("receivedMessage", (data) => {
-      let existingList = [...messageList];
-
       setMessageList((list) => [...list, data]);
 
       if (data.message.includes("/countdown")) {
