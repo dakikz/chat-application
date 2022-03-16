@@ -56,9 +56,8 @@ const ChatBodyMessage = styled.div`
     display: flex;
     flex-direction: column;
     max-width: 100%;
-    /* margin-bottom: 10px; */
   }
-  &#me {
+  &#other {
     display: flex;
     align-items: flex-start;
     & .messageBubble {
@@ -86,7 +85,7 @@ const ChatBodyMessage = styled.div`
       }
     }
   }
-  &#other {
+  &#me {
     text-align: left;
     display: flex;
     align-items: flex-end;
@@ -131,9 +130,12 @@ const ChatBodyMessage = styled.div`
 `;
 const ChatHeader = styled.div`
   color: ${colors.white};
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 600;
   padding: 10px;
+  & span {
+    font-weight: 800;
+  }
 `;
 const ChatBody = styled.div`
   background-color: ${colors.lightGrey};
@@ -194,7 +196,7 @@ const ChatFooter = styled.div`
   }
 `;
 
-const ChatWindow = ({ socket, username, other }) => {
+const ChatWindow = ({ socket, username }) => {
   const [currentMessage, setCurrentMessage] = useState(""); // Keep track of current message
   const [messageList, setMessageList] = useState([]);
   const [clicked, setClicked] = useState(false);
@@ -218,12 +220,13 @@ const ChatWindow = ({ socket, username, other }) => {
           (new Date(Date.now()).getMinutes() < 10 ? "0" : "") +
           new Date(Date.now()).getMinutes(),
       };
-      console.log(messageList);
 
       if (currentMessage.substring(0, 5) === "/nick") {
+        // Set's username here
       }
 
       if (currentMessage.substring(0, 6) === "/think") {
+        // Last message will be displayed in dark grey, instead of black
       }
 
       if (currentMessage.substring(0, 5) === "/oops") {
@@ -241,7 +244,6 @@ const ChatWindow = ({ socket, username, other }) => {
   // Listen to any changes on the socket server
   useEffect(() => {
     socket.on("usersJoin", (data) => {
-      console.log(data);
       username = data.user;
       setUser(data.user);
     });
@@ -254,7 +256,6 @@ const ChatWindow = ({ socket, username, other }) => {
         const separatorCommands = data.message.split(" ");
 
         let timeLimit = parseInt(separatorCommands[1]);
-        console.log(timeLimit);
         const urlTo = separatorCommands[2];
 
         setCountdown(true);
@@ -274,55 +275,59 @@ const ChatWindow = ({ socket, username, other }) => {
   }, []);
 
   return (
-    <ChatOuter>
+    <>
       {countdown && (
         <Countdown className="countdown">
           Redirecting you in <span>{countdownTime}</span>
         </Countdown>
       )}
-      <ChatHeader>Chat with: {user}</ChatHeader>
-      <ChatBody>
-        <ScrollToBottom className="chatContainer">
-          {messageList.map((item, idx) => (
-            <ChatBodyMessage
-              key={idx}
-              id={username === item.author ? "me" : "other"}
-            >
-              <div className="messageSet">
-                <p
-                  className="messageBubble "
-                  onClick={() => setClicked(!clicked)}
-                >
-                  {item.message}
-                </p>
-                <div
-                  className={`messageDetails ${clicked ? `showIt` : `asdf`}`}
-                >
-                  <p>{item.author}</p>
-                  <p>{item.time}</p>
+      <ChatOuter>
+        <ChatHeader>
+          <span>Chat with:</span> Other's username, {user}
+        </ChatHeader>
+        <ChatBody>
+          <ScrollToBottom className="chatContainer">
+            {messageList.map((item, idx) => (
+              <ChatBodyMessage
+                key={idx}
+                id={username === item.author ? "me" : "other"}
+              >
+                <div className="messageSet">
+                  <p
+                    className="messageBubble "
+                    onClick={() => setClicked(!clicked)}
+                  >
+                    {item.message}
+                  </p>
+                  <div
+                    className={`messageDetails ${clicked ? `showIt` : `asdf`}`}
+                  >
+                    <p>{item.author}</p>
+                    <p>{item.time}</p>
+                  </div>
                 </div>
-              </div>
-            </ChatBodyMessage>
-          ))}
-        </ScrollToBottom>
-      </ChatBody>
-      <ChatFooter>
-        <input
-          type="text"
-          placeholder="Type a message..."
-          value={currentMessage}
-          onChange={(event) => {
-            setCurrentMessage(event.target.value);
-          }}
-          onKeyPress={(event) => {
-            event.key === "Enter" && sendMessage();
-          }}
-        />
-        <button onClick={sendMessage}>
-          <BiSend size={25} color={`${colors.accentBlue}`} />
-        </button>
-      </ChatFooter>
-    </ChatOuter>
+              </ChatBodyMessage>
+            ))}
+          </ScrollToBottom>
+        </ChatBody>
+        <ChatFooter>
+          <input
+            type="text"
+            placeholder="Type a message..."
+            value={currentMessage}
+            onChange={(event) => {
+              setCurrentMessage(event.target.value);
+            }}
+            onKeyPress={(event) => {
+              event.key === "Enter" && sendMessage();
+            }}
+          />
+          <button onClick={sendMessage}>
+            <BiSend size={25} color={`${colors.accentBlue}`} />
+          </button>
+        </ChatFooter>
+      </ChatOuter>
+    </>
   );
 };
 
