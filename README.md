@@ -9,13 +9,17 @@ Total hours spent approximately: 10 hours
 
 ## To run the project:
 
-In terminal, go to client folder: cd client
+1) Download project
+
+2) In terminal, go to client folder: cd client
+npm i
 npm start
 
-Open another terminal and go to server folder: cd server
+3) Open another terminal and go to server folder: cd server
+npm i
 npm start
 
-Open localhost:3000 in two different tabs/windows and log in to the app using 2 different usernames
+4) Open localhost:3000 in two different tabs/windows and log in to the app using 2 different usernames
 
 ## Implementation
 
