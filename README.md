@@ -3,6 +3,9 @@
 Kodify Chat Application Test
 
 Started the project on Sunday 13/3/2022 @ 15:30
+Finished the project on Wednesday 16/3/2022 @ 16:40
+
+Total hours spent approximately: 10 hours
 
 ## To run the project:
 
